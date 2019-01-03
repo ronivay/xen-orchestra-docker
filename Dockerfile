@@ -49,9 +49,9 @@ RUN ln -sf /proc/1/fd/1 /var/log/redis/redis.log
 RUN ln -sf /proc/1/fd/1 /var/log/xo-server.log
 
 # Healtcheck
-ADD healtcheck.sh /healtcheck.sh
-RUN chmod +x /healtcheck.sh
-HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healtcheck.sh
+ADD healthcheck.sh /healtcheck.sh
+RUN chmod +x /healthcheck.sh
+HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healthcheck.sh
 
 WORKDIR /etc/xen-orchestra/xo-server
 
