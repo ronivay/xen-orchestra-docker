@@ -48,8 +48,8 @@ RUN npm install forever -g
 RUN ln -sf /proc/1/fd/1 /var/log/redis/redis.log
 RUN ln -sf /proc/1/fd/1 /var/log/xo-server.log
 
-# Healtcheck
-ADD healthcheck.sh /healtcheck.sh
+# Healthcheck
+ADD healthcheck.sh /healthcheck.sh
 RUN chmod +x /healthcheck.sh
 HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healthcheck.sh
 
