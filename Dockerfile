@@ -36,10 +36,10 @@ RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-ser
 RUN cd /etc/xen-orchestra && yarn && yarn build
 
 # Fix path for xo-web content in xo-server configuration
-RUN sed -i "s/#'\/': '\/path\/to\/xo-web\/dist\//'\/': '..\/xo-web\/dist\//" /etc/xen-orchestra/packages/xo-server/sample.config.yaml
+RUN sed -i "s/#'\/' = '\/path\/to\/xo-web\/dist\//'\/' = '..\/xo-web\/dist\//" /etc/xen-orchestra/packages/xo-server/sample.config.toml
 
 # Move edited config sample to place
-RUN mv /etc/xen-orchestra/packages/xo-server/sample.config.yaml /etc/xen-orchestra/packages/xo-server/.xo-server.yaml
+RUN mv /etc/xen-orchestra/packages/xo-server/sample.config.toml /etc/xen-orchestra/packages/xo-server/.xo-server.toml
 
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
