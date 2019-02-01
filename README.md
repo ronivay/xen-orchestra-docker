@@ -2,6 +2,8 @@
 
 This repository contains files to build Xen-Orchestra community edition docker container with all features and plugins installed
 
+Latest tag is daily build from xen-orchestra master branch. Tagged releases follow xen-orchestra versioning.
+
 Xen-Orchestra is a Web-UI for managing your existing XenServer infrastructure.
 
 https://xen-orchestra.com/
