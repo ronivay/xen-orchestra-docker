@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:7
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
