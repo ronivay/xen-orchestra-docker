@@ -26,7 +26,7 @@ docker build -t xen-orchestra .
 - or pull from dockerhub
 
 ```
-docker pull ronivay/en-orchestra
+docker pull ronivay/xen-orchestra
 ```
 
 - run it with defaults values for testing purposes. 
