@@ -1,5 +1,3 @@
-set init
-
 check process xo-server with pidfile /var/run/xo-server.pid
 	depends on redis
 	start program = "/usr/bin/forever start -a --pidFile /var/run/xo-server.pid --sourceDir /etc/xen-orchestra/packages/xo-server -l /var/log/xo-server.log bin/xo-server"

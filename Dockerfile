@@ -53,8 +53,12 @@ ADD healthcheck.sh /healthcheck.sh
 RUN chmod +x /healthcheck.sh
 HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healthcheck.sh
 
+# Copy startup script
+ADD run.sh /run.sh
+RUN chmod +x /run.sh
+
 WORKDIR /etc/xen-orchestra/xo-server
 
 EXPOSE 80
 
-CMD ["/usr/bin/monit"]
+CMD ["/run.sh"]
