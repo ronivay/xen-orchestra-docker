@@ -10,3 +10,4 @@ check process redis with pidfile /var/run/redis_6379.pid
 check process rpcbind
 	matching "rpcbind"
 	start program = "/usr/sbin/rpcbind"
+        stop program = "/usr/bin/pkill rpcbind"

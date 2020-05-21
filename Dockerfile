@@ -4,8 +4,8 @@ MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
 # Install set of dependencies to support running Xen-Orchestra
 
-# Node v8
-RUN curl -s -L https://rpm.nodesource.com/setup_8.x | bash -
+# Node v12
+RUN curl -s -L https://rpm.nodesource.com/setup_12.x | bash -
 
 # yarn for installing node packages
 RUN curl -s -o /etc/yum.repos.d/yarn.repo https://dl.yarnpkg.com/rpm/yarn.repo
