@@ -43,4 +43,7 @@ Xen-Orchestra is now accessible at http://your-ip-address. Default credentials a
 docker run -itd -p 80:80 -v /path/to/data/xo-server:/var/lib/xo-server -v /path/to/data/redis:/var/lib/redis ronivay/xen-orchestra
 ```
 
+I also suggest adding --stop-timeout since there are multiple services inside single container and we want them to shutdown gracefully when container is stopped. Default timeout is 10seconds which can be too short.
 
+```
+docker run --stop-timeout 60 -itd -p 80:80 -v /path/to/data/xo-server:/var/lib/xo-server -v /path/to/data/redis:/var/lib/redis ronivay/xen-orchestra
