@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:8
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
@@ -15,7 +15,7 @@ RUN yum -y install yarn
 RUN yum -y install epel-release
 
 # build dependencies, git for fetching source and redis server for storing data
-RUN yum -y install gcc gcc-c++ make openssl openssl-devel redis libpng-devel python git nfs-utils cifs-utils
+RUN yum -y install gcc gcc-c++ make openssl openssl-devel redis libpng-devel python3 git nfs-utils cifs-utils
 
 # libvhdi-tools for file-level restore
 RUN rpm -ivh https://forensics.cert.org/cert-forensics-tools-release-el7.rpm
