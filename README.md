@@ -105,8 +105,9 @@ services:
           - apparmor:unconfined
         volumes:
           - xo-data:/var/lib/xo-server
+          - redis-data:/var/lib/redis
           # mount certificate files to container if HTTPS is set with cert/key paths
-          #- /path/to/cert.pem:/cert.pem
+       	  #- /path/to/cert.pem:/cert.pem
           #- /path/to/cert.key:/cert.key
         # logging
         logging: &default_logging
@@ -117,6 +118,7 @@ services:
 
 volumes:
   xo-data:
+  redis-data:
 ```
 
 #### Variables
