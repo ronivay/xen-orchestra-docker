@@ -1,5 +1,7 @@
 # Xen-Orchestra docker container
 
+Image has been refactored with Ubuntu as base image and quite a few changes starting 14th Jun 2021. It should be drop in replacement for old image, but in case needed, old image is found with tag centos.
+
 This repository contains files to build Xen-Orchestra community edition docker container with all features and plugins installed
 
 Latest tag is daily build from xen orchestra sources master branch. xen orchestra github project has stopped making versioned releases, therefore container is built only against master branch. All other container tags are old and only kept for compatibility.
@@ -53,7 +55,7 @@ In case your system is also using an application security framework AppArmor or 
 
 For AppArmor you will have to add also `--security-opt apparmor:unconfined`. 
 
-Bellow is an example command for running the app in a docker container with:
+Below is an example command for running the app in a docker container with:
 
 * automatic container start on boot / crash 
 * enogh capabilities to mount nfs shares
@@ -72,3 +74,73 @@ docker run -itd \
 
 ```
 
+You may also use docker-compose. Copy configuration from below of example docker-compose.yml from github repository
+
+```
+version: '3'
+services:
+    xen-orchestra:
+        restart: unless-stopped
+        image: ronivay/xen-orchestra:latest
+        container_name: xen-orchestrea
+        stop_grace_period: 1m
+        ports:
+            - "80:80"
+            #- "443:443"
+        environment:
+            - HTTP_PORT=80
+            #- HTTPS_PORT=443
+
+            #redirect takes effect only if HTTPS_PORT is defined
+            #- REDIRECT_TO_HTTPS=true
+
+            #if HTTPS_PORT is defined and CERT/KEY paths are empty, a self-signed certificate will be generated
+            #- CERT_PATH='/cert.pem'
+            #- KEY_PATH='/cert.key'
+        # capabilities are needed for NFS mount
+        cap_add:
+          - SYS_ADMIN
+        # additional setting required for apparmor enabled systems. also needed for NFS mount
+        security_opt:
+          - apparmor:unconfined
+        volumes:
+          - xo-data:/var/lib/xo-server
+          # mount certificate files to container if HTTPS is set with cert/key paths
+          #- ./temp-cert.pem:/temp-cert.pem
+          #- ./temp-key.pem:/temp-key.pem
+        # logging
+        logging: &default_logging
+            driver: "json-file"
+            options:
+                max-size: "1M"
+                max-file: "2"
+
+volumes:
+  xo-data:
+```
+
+#### Variables
+
+`HTTP_PORT`
+
+Listening HTTP port inside container
+
+`HTTPS_PORT`
+
+Listening HTTPS port inside container
+
+`REDIRECT_TO_HTTPS`
+
+Boolean value true/false. If set to true, will redirect any HTTP traffic to HTTPS. Requires that HTTPS_PORT is set. Defaults to: false
+
+`CERT_PATH`
+
+Path inside container for user specified PEM certificate file. Example: '/path/to/cert'
+
+If HTTPS_PORT is set and CERT_PATH not given, a self-signed certificate and key will be generated automatically.
+
+`KEY_PATH`
+
+Path inside container for user specified key file. Example: '/path/to/key'
+
+if HTTPS_PORT is set and KEY_PATH not given, a self-signed certificate and key will be generated automatically.

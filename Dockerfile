@@ -1,29 +1,25 @@
-FROM centos:8
+FROM ubuntu:focal
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
 # Install set of dependencies to support running Xen-Orchestra
 
+# build dependencies, git for fetching source and redis server for storing data
+RUN apt update && \
+    apt install -y build-essential redis-server libpng-dev git libvhdi-utils python2-minimal lvm2 nfs-common cifs-utils curl python3-jinja2
+
 # Node v14
-RUN curl -s -L https://rpm.nodesource.com/setup_14.x | bash -
+RUN curl -s -L https://deb.nodesource.com/setup_14.x | bash -
 
 # yarn for installing node packages
-RUN curl -s -o /etc/yum.repos.d/yarn.repo https://dl.yarnpkg.com/rpm/yarn.repo
-RUN yum -y install yarn
-
-# epel-release for various packages not available from base repo
-RUN yum -y install epel-release
-
-# build dependencies, git for fetching source and redis server for storing data
-RUN yum -y install gcc gcc-c++ make openssl openssl-devel redis libpng-devel python3 git nfs-utils cifs-utils
-
-# libvhdi-tools for file-level restore
-RUN rpm -ivh https://forensics.cert.org/cert-forensics-tools-release-el7.rpm
-RUN yum --enablerepo=forensics install -y libvhdi-tools
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt update && \
+    apt install -y yarn
 
 # monit to keep an eye on processes
-RUN yum -y install monit
-ADD monit-services /etc/monit.d/services
+RUN apt -y install monit
+ADD conf/monit-services /etc/monit/conf.d/services
 
 # Fetch Xen-Orchestra sources from git stable branch
 RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orchestra
@@ -35,29 +31,30 @@ RUN cd /etc/xen-orchestra && yarn && yarn build
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 RUN cd /etc/xen-orchestra && yarn && yarn build
 
-# Fix path for xo-web content in xo-server configuration
-RUN sed -i "s/#'\/' = '\/path\/to\/xo-web\/dist\//'\/' = '..\/xo-web\/dist\//" /etc/xen-orchestra/packages/xo-server/sample.config.toml
-
-# Move edited config sample to place
-RUN mv /etc/xen-orchestra/packages/xo-server/sample.config.toml /etc/xen-orchestra/packages/xo-server/.xo-server.toml
-
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
 
+# cleanup
+RUN yarn cache clean --all
+
 # Logging
-RUN ln -sf /proc/1/fd/1 /var/log/redis/redis.log
-RUN ln -sf /proc/1/fd/1 /var/log/xo-server.log
+RUN ln -sf /proc/1/fd/1 /var/log/redis/redis-server.log && \
+    ln -sf /proc/1/fd/1 /var/log/xo-server.log && \
+    ln -sf /proc/1/fd/1 /var/log/monit.log
 
 # Healthcheck
 ADD healthcheck.sh /healthcheck.sh
 RUN chmod +x /healthcheck.sh
 HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healthcheck.sh
 
+# Copy xo-server configuration template
+ADD conf/xo-server.toml.j2 /xo-server.toml.j2
+
 # Copy startup script
 ADD run.sh /run.sh
 RUN chmod +x /run.sh
 
-WORKDIR /etc/xen-orchestra/xo-server
+WORKDIR /etc/xen-orchestra/packages/xo-server
 
 EXPOSE 80
 

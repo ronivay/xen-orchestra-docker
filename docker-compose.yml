@@ -1,0 +1,42 @@
+version: '3'
+services:
+    xen-orchestra:
+        restart: unless-stopped
+        image: ronivay/xen-orchestra:latest
+        container_name: xen-orchestra
+        stop_grace_period: 1m
+        ports:
+            - "80:80"
+            #- "443:443"
+        environment:
+            - HTTP_PORT=80
+            #- HTTPS_PORT=443
+
+            #redirect takes effect only if HTTPS_PORT is defined
+            #- REDIRECT_TO_HTTPS=true
+
+            #if HTTPS_PORT is defined and CERT/KEY paths are empty, a self-signed certificate will be generated 
+            #- CERT_PATH='/cert.pem'
+            #- KEY_PATH='/cert.key'
+        # capabilities are needed for NFS mount
+        cap_add:
+          - SYS_ADMIN
+        # additional setting required for apparmor enabled systems. also needed for NFS mount
+        security_opt:
+          - apparmor:unconfined
+        volumes:
+          - xo-data:/var/lib/xo-server
+          - redis-data:/var/lib/redis
+          # mount certificate files to container if HTTPS is set with cert/key paths
+          #- ./temp-cert.pem:/temp-cert.pem
+          #- ./temp-key.pem:/temp-key.pem
+        # logging
+        logging: &default_logging
+            driver: "json-file"
+            options:
+                max-size: "1M"
+                max-file: "2"
+
+volumes:
+  xo-data:
+  redis-data:

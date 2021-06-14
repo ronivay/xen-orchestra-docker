@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/bin/curl -s -I -m 3 http://127.0.0.1 >/dev/null
+/usr/bin/curl -s -k -L -I -m 3 http://127.0.0.1:${HTTP_PORT} >/dev/null
 
 if [[ "$?" == "0" ]]; then
 	webcheck_retval="0"
