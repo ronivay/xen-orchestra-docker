@@ -82,7 +82,7 @@ services:
     xen-orchestra:
         restart: unless-stopped
         image: ronivay/xen-orchestra:latest
-        container_name: xen-orchestrea
+        container_name: xen-orchestra
         stop_grace_period: 1m
         ports:
             - "80:80"
@@ -106,8 +106,8 @@ services:
         volumes:
           - xo-data:/var/lib/xo-server
           # mount certificate files to container if HTTPS is set with cert/key paths
-          #- ./temp-cert.pem:/temp-cert.pem
-          #- ./temp-key.pem:/temp-key.pem
+          #- /path/to/cert.pem:/cert.pem
+          #- /path/to/cert.key:/cert.key
         # logging
         logging: &default_logging
             driver: "json-file"
