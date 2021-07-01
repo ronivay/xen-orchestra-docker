@@ -29,7 +29,6 @@ RUN cd /etc/xen-orchestra && yarn && yarn build
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
-RUN cd /etc/xen-orchestra && yarn && yarn build
 
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
