@@ -1,10 +1,8 @@
 # Xen-Orchestra docker container
 
-Image has been refactored with Ubuntu as base image and quite a few changes starting 14th Jun 2021. It should be drop in replacement for old image, but in case needed, old image is found with tag centos.
-
 This repository contains files to build Xen-Orchestra community edition docker container with all features and plugins installed
 
-Latest tag is daily build from xen orchestra sources master branch. xen orchestra github project has stopped making versioned releases, therefore container is built only against master branch. All other container tags are old and only kept for compatibility.
+Latest tag is daily build from xen orchestra sources master branch.
 
 Xen-Orchestra is a Web-UI for managing your existing XenServer infrastructure.
 
