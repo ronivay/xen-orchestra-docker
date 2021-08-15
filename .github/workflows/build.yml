@@ -30,7 +30,7 @@ jobs:
       - name: Get xo-server version
         id: xo-version
         run: |
-          echo "VERSION=$(curl -s https://raw.githubusercontent.com/vatesfr/xen-orchestra/master/packages/xo-server/package.json | jq -r .version)" >> $GITHUB_ENV
+          echo "XO_VERSION=$(curl -s https://raw.githubusercontent.com/vatesfr/xen-orchestra/master/packages/xo-server/package.json | jq -r .version)" >> $GITHUB_ENV
 
       - name: Build image and push
         uses: docker/build-push-action@v2
@@ -40,4 +40,4 @@ jobs:
           push: true
           tags: |
             ronivay/xen-orchestra:latest
-            ronivay/xen-orchestra:${{ env.VERSION }}
+            ronivay/xen-orchestra:${{ env.XO_VERSION }}

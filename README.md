@@ -1,6 +1,6 @@
 # Xen-Orchestra docker container
 
-[![image pulls](https://img.shields.io/docker/pulls/ronivay/xen-orchestra.svg)](https://hub.docker.com/repository/docker/ronivay/xen-orchestra) ![image size (tag)](https://img.shields.io/docker/image-size/ronivay/xen-orchestra/latest)
+[![image pulls](https://img.shields.io/docker/pulls/ronivay/xen-orchestra.svg)](https://hub.docker.com/r/ronivay/xen-orchestra) [![image size (tag)](https://img.shields.io/docker/image-size/ronivay/xen-orchestra/latest)](https://hub.docker.com/r/ronivay/xen-orchestra)
 
 [![](https://github.com/ronivay/xen-orchestra-docker/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ronivay/xen-orchestra-docker/actions?query=workflow%3Abuild)
 
