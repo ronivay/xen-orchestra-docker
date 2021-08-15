@@ -1,40 +1,39 @@
-FROM ubuntu:focal
+# builder container
+FROM node:14-buster-slim as build
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
-# Install set of dependencies to support running Xen-Orchestra
-
-# build dependencies, git for fetching source and redis server for storing data
+# Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
-    apt install -y build-essential redis-server libpng-dev git libvhdi-utils python2-minimal lvm2 nfs-common cifs-utils curl python3-jinja2
-
-# Node v14
-RUN curl -s -L https://deb.nodesource.com/setup_14.x | bash -
-
-# yarn for installing node packages
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt update && \
-    apt install -y yarn
-
-# monit to keep an eye on processes
-RUN apt -y install monit
-ADD conf/monit-services /etc/monit/conf.d/services
+    apt install -y build-essential python2-minimal libpng-dev ca-certificates git
 
 # Fetch Xen-Orchestra sources from git stable branch
 RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orchestra
 
 # Run build tasks against sources
-RUN cd /etc/xen-orchestra && yarn && yarn build
+# Docker buildx QEMU arm64 emulation is slow, so we set timeout for yarn
+RUN cd /etc/xen-orchestra && \
+    yarn config set network-timeout 200000 && \
+    yarn && \
+    yarn build
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 
+# Runner container
+FROM node:14-buster-slim
+
+# Install set of dependencies for running Xen Orchestra
+# backports repo needed for monit
+RUN echo 'deb http://deb.debian.org/debian/ buster-backports main' | tee /etc/apt/sources.list.d/backports.list
+RUN apt update && \
+    apt install -y redis-server libvhdi-utils python2-minimal python-jinja2 lvm2 nfs-common cifs-utils ca-certificates monit
+
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
 
-# cleanup
-RUN yarn cache clean --all
+# Copy built xen orchestra from builder
+COPY --from=build /etc/xen-orchestra /etc/xen-orchestra
 
 # Logging
 RUN ln -sf /proc/1/fd/1 /var/log/redis/redis-server.log && \
@@ -48,6 +47,9 @@ HEALTHCHECK --start-period=1m --interval=30s --timeout=5s --retries=2 CMD /healt
 
 # Copy xo-server configuration template
 ADD conf/xo-server.toml.j2 /xo-server.toml.j2
+
+# Copy monit configuration
+ADD conf/monit-services /etc/monit/conf.d/services
 
 # Copy startup script
 ADD run.sh /run.sh

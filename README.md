@@ -1,8 +1,10 @@
 # Xen-Orchestra docker container
 
+[![docker pulls](https://img.shields.io/docker/pulls/ronivay/xen-orchestra.svg)](https://hub.docker.com/repository/docker/ronivay/xen-orchestra) [![](https://github.com/ronivay/xen-orchestra-docker/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ronivay/xen-orchestra-docker/actions?query=workflow%3Abuild)
+
 This repository contains files to build Xen-Orchestra community edition docker container with all features and plugins installed
 
-Latest tag is daily build from xen orchestra sources master branch.
+Latest tag is weekly build from xen orchestra sources master branch.
 
 Xen-Orchestra is a Web-UI for managing your existing XenServer infrastructure.
 
@@ -105,7 +107,7 @@ services:
           - xo-data:/var/lib/xo-server
           - redis-data:/var/lib/redis
           # mount certificate files to container if HTTPS is set with cert/key paths
-       	  #- /path/to/cert.pem:/cert.pem
+          #- /path/to/cert.pem:/cert.pem
           #- /path/to/cert.key:/cert.key
         # logging
         logging: &default_logging

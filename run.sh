@@ -17,7 +17,7 @@ HTTP_PORT=${HTTP_PORT:-"80"}
 CERT_PATH=${CERT_PATH:-\'./temp-cert.pem\'}
 KEY_PATH=${KEY_PATH:-\'./temp-key.pem\'}
 
-/usr/bin/python3 -c 'import os
+/usr/bin/python2 -c 'import os
 import sys
 import jinja2
 sys.stdout.write(
