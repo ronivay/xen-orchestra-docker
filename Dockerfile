@@ -1,8 +1,6 @@
 # builder container
 FROM node:14-buster-slim as build
 
-MAINTAINER Roni Väyrynen <roni@vayrynen.info>
-
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
     apt install -y build-essential python2-minimal libpng-dev ca-certificates git
@@ -22,6 +20,8 @@ RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-ser
 
 # Runner container
 FROM node:14-buster-slim
+
+MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
 # Install set of dependencies for running Xen Orchestra
 # backports repo needed for monit
