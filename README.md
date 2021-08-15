@@ -1,10 +1,12 @@
 # Xen-Orchestra docker container
 
-[![docker pulls](https://img.shields.io/docker/pulls/ronivay/xen-orchestra.svg)](https://hub.docker.com/repository/docker/ronivay/xen-orchestra) [![](https://github.com/ronivay/xen-orchestra-docker/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ronivay/xen-orchestra-docker/actions?query=workflow%3Abuild)
+[![image pulls](https://img.shields.io/docker/pulls/ronivay/xen-orchestra.svg)](https://hub.docker.com/repository/docker/ronivay/xen-orchestra) ![image size (tag)](https://img.shields.io/docker/image-size/ronivay/xen-orchestra/latest)
+
+[![](https://github.com/ronivay/xen-orchestra-docker/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ronivay/xen-orchestra-docker/actions?query=workflow%3Abuild)
 
 This repository contains files to build Xen-Orchestra community edition docker container with all features and plugins installed
 
-Latest tag is weekly build from xen orchestra sources master branch.
+Latest tag is weekly build from xen orchestra sources master branch. Images are also tagged based on xo-server version.
 
 Xen-Orchestra is a Web-UI for managing your existing XenServer infrastructure.
 
