@@ -7,10 +7,6 @@ on:
     paths-ignore:
       - 'README.md'
       - 'docker-compose.yml'
-  pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'docker-compose.yml'
 
 jobs:
   build-and-push:
