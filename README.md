@@ -117,6 +117,12 @@ services:
             options:
                 max-size: "1M"
                 max-file: "2"
+        # these are needed for file restore. allows one backup to be mounted at once which will be umounted after some minutes if not used (prevents other backups to be mounted during that)
+        # add loop devices (loop1, loop2 etc) if multiple simultaneous mounts needed.
+        #devices:
+        #  - "/dev/fuse:/dev/fuse"
+        #  - "/dev/loop-control:/dev/loop-control"
+        #  - "/dev/loop0:/dev/loop0"
 
 volumes:
   xo-data:
