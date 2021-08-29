@@ -27,7 +27,7 @@ MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 # backports repo needed for monit
 RUN echo 'deb http://deb.debian.org/debian/ buster-backports main' | tee /etc/apt/sources.list.d/backports.list
 RUN apt update && \
-    apt install -y redis-server libvhdi-utils python2-minimal python-jinja2 lvm2 nfs-common cifs-utils ca-certificates monit procps curl
+    apt install -y redis-server libvhdi-utils python2-minimal python-jinja2 lvm2 nfs-common netbase cifs-utils ca-certificates monit procps curl
 
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
