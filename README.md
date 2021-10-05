@@ -146,11 +146,13 @@ Boolean value true/false. If set to true, will redirect any HTTP traffic to HTTP
 `CERT_PATH`
 
 Path inside container for user specified PEM certificate file. Example: '/path/to/cert'
+Note: single quotes are part of the value and mandatory!
 
 If HTTPS_PORT is set and CERT_PATH not given, a self-signed certificate and key will be generated automatically.
 
 `KEY_PATH`
 
 Path inside container for user specified key file. Example: '/path/to/key'
+Note: single quotes are part of the value and mandatory!
 
 if HTTPS_PORT is set and KEY_PATH not given, a self-signed certificate and key will be generated automatically.
