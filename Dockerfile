@@ -1,5 +1,5 @@
 # builder container
-FROM node:14-buster-slim as build
+FROM node:16-buster-slim as build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
@@ -19,7 +19,7 @@ RUN cd /etc/xen-orchestra && \
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 
 # Runner container
-FROM node:14-buster-slim
+FROM node:16-buster-slim
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
