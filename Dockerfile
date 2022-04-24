@@ -1,5 +1,5 @@
 # builder container
-FROM node:16-buster-slim as build
+FROM node:16-buster as build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
