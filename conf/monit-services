@@ -4,7 +4,7 @@ set httpd port 2812 and
 
 check process xo-server with pidfile /var/run/xo-server.pid
 	depends on redis
-	start program = "/usr/local/bin/forever start -a --pidFile /var/run/xo-server.pid --sourceDir /etc/xen-orchestra/packages/xo-server -l /var/log/xo-server.log dist/cli.mjs"
+	start program = "/usr/bin/env NODE_EXTRA_CA_CERTS=/host-ca.pem /usr/local/bin/forever start -a --pidFile /var/run/xo-server.pid --sourceDir /etc/xen-orchestra/packages/xo-server -l /var/log/xo-server.log dist/cli.mjs"
 	stop program = "/usr/local/bin/forever stop /etc/xen-orchestra/packages/xo-server/dist/cli.mjs"
 
 check process redis with pidfile /var/run/redis.pid

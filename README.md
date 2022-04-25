@@ -111,6 +111,8 @@ services:
           # mount certificate files to container if HTTPS is set with cert/key paths
           #- /path/to/cert.pem:/cert.pem
           #- /path/to/cert.key:/cert.key
+	  # mount your custom CA to container if host certificates are issued by it and you want XO to trust it
+	  #- /path/to/ca.pem:/host-ca.pem
         # logging
         logging: &default_logging
             driver: "json-file"
