@@ -51,8 +51,8 @@ I also suggest adding --stop-timeout since there are multiple services inside si
 Default timeout is 10 seconds which can be too short.
 
 In recent versions docker containers run without privileges (root) or with reduced privileges. 
-In those case XenOrchestra will not be able to mount nfs shares for Remotes from within docker.
-To fix that you will have to run docker with privileges: `--cap-add sys_admin` option or `--priviledged` for all privileges. 
+In those case XenOrchestra will not be able to mount nfs/smb shares for Remotes from within docker.
+To fix that you will have to run docker with privileges: `--cap-add sys_admin --cap-add dac_read_search` option or `--priviledged` for all privileges. 
 In case your system is also using an application security framework AppArmor or SELinux you will need to take additional steps.
 
 For AppArmor you will have to add also `--security-opt apparmor:unconfined`. 
@@ -68,6 +68,7 @@ docker run -itd \
   --stop-timeout 60 \
   --restart unless-stopped \
   --cap-add sys_admin \
+  --cap-add dac_read_search \
   --security-opt apparmor:unconfined \
   -p 80:80 \
   -v /path/to/data/xo-server:/var/lib/xo-server \
@@ -99,9 +100,10 @@ services:
             #if HTTPS_PORT is defined and CERT/KEY paths are empty, a self-signed certificate will be generated
             #- CERT_PATH='/cert.pem'
             #- KEY_PATH='/cert.key'
-        # capabilities are needed for NFS mount
+        # capabilities are needed for NFS/SMB mount
         cap_add:
           - SYS_ADMIN
+          - DAC_READ_SEARCH
         # additional setting required for apparmor enabled systems. also needed for NFS mount
         security_opt:
           - apparmor:unconfined
