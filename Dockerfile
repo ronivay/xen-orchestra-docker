@@ -1,9 +1,9 @@
 # builder container
-FROM node:16-buster as build
+FROM node:18-bullseye as build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
-    apt install -y build-essential python2-minimal libpng-dev ca-certificates git
+    apt install -y build-essential python3-minimal libpng-dev ca-certificates git fuse
 
 # Fetch Xen-Orchestra sources from git stable branch
 RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orchestra
@@ -19,15 +19,13 @@ RUN cd /etc/xen-orchestra && \
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 
 # Runner container
-FROM node:16-buster-slim
+FROM node:18-bullseye-slim
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
 # Install set of dependencies for running Xen Orchestra
-# backports repo needed for monit
-RUN echo 'deb http://deb.debian.org/debian/ buster-backports main' | tee /etc/apt/sources.list.d/backports.list
 RUN apt update && \
-    apt install -y redis-server libvhdi-utils python2-minimal python-jinja2 lvm2 nfs-common netbase cifs-utils ca-certificates monit procps curl ntfs-3g
+    apt install -y redis-server libvhdi-utils python3-minimal python3-jinja2 lvm2 nfs-common netbase cifs-utils ca-certificates monit procps curl ntfs-3g
 
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
