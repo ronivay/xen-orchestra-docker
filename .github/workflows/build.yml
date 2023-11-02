@@ -8,6 +8,8 @@ on:
       - 'README.md'
       - 'docker-compose.yml'
       - '.github/workflows/description.yml'
+    branches:
+      - 'master'
 jobs:
   build-and-push:
     runs-on: ubuntu-latest

@@ -5,6 +5,8 @@ on:
     paths:
       - 'README.md'
       - '.github/workflows/description.yml'
+    branches:
+      - 'master'
 jobs:
   dockerhubdescription:
     runs-on: ubuntu-latest
