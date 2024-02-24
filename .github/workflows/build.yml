@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - 'README.md'
       - 'docker-compose.yml'
-      - '.github/workflows/description.yml'
+      - '.github/**'
     branches:
       - 'master'
   workflow_dispatch:
