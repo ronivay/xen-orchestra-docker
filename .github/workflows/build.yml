@@ -10,6 +10,8 @@ on:
       - '.github/workflows/description.yml'
     branches:
       - 'master'
+  workflow_dispatch:
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
