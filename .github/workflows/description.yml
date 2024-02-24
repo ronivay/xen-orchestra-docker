@@ -7,6 +7,8 @@ on:
       - '.github/workflows/description.yml'
     branches:
       - 'master'
+  workflow_dispatch:
+
 jobs:
   dockerhubdescription:
     runs-on: ubuntu-latest
