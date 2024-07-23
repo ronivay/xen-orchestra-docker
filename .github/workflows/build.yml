@@ -37,7 +37,7 @@ jobs:
           echo "XO_VERSION=$(curl -s https://raw.githubusercontent.com/vatesfr/xen-orchestra/master/packages/xo-server/package.json | jq -r .version)" >> $GITHUB_ENV
 
       - name: Build image and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64
