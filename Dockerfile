@@ -1,5 +1,5 @@
 # builder container
-FROM node:18-bullseye as build
+FROM node:20-bullseye as build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
@@ -19,7 +19,7 @@ RUN cd /etc/xen-orchestra && \
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 
 # Runner container
-FROM node:18-bullseye-slim
+FROM node:20-bullseye-slim
 
 MAINTAINER Roni Väyrynen <roni@vayrynen.info>
 
