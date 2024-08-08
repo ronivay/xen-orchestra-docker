@@ -160,3 +160,16 @@ Path inside container for user specified key file. Example: '/path/to/key'
 Note: single quotes are part of the value and mandatory!
 
 if HTTPS_PORT is set and KEY_PATH not given, a self-signed certificate and key will be generated automatically.
+
+#### Configuration
+
+xo-server configuration inside container is generated only once based on variables if config file is missing.
+
+If you wish to customize the xo-server configuration file manually. Mount some directory to `/etc/xo-server` path inside container, eq:
+
+```
+docker run -itd -p 80:80 -v /path/to/xo-config:/etc/xo-server ronivay/xen-orchestra
+```
+
+Once container has started for the first time, you'll now have a configuration file at `/path/to/xo-config/config.toml` which you can edit.
+Restarting container will apply the modified configuration.

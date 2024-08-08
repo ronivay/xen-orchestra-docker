@@ -10,8 +10,12 @@ function StopProcesses {
 	exit 0
 }
 
+
+if [[ ! -f /etc/xo-server/config.toml ]]; then
 # generate configuration
 set -a
+
+[[ ! -d /etc/xo-server ]] && mkdir /etc/xo-server
 
 HTTP_PORT=${HTTP_PORT:-"80"}
 CERT_PATH=${CERT_PATH:-\'./temp-cert.pem\'}
@@ -22,10 +26,11 @@ import sys
 import jinja2
 sys.stdout.write(
     jinja2.Template(sys.stdin.read()
-).render(env=os.environ))' </xo-server.toml.j2 >/etc/xen-orchestra/packages/xo-server/.xo-server.toml
+).render(env=os.environ))' </xo-server.toml.j2 >/etc/xo-server/config.toml
 
 set +a
 # start services
+fi
 
 trap StopProcesses EXIT TERM
 
