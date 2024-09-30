@@ -1,6 +1,8 @@
 # builder container
 FROM node:20-bullseye as build
 
+ARG include_v6
+
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
     apt install -y build-essential python3-minimal libpng-dev ca-certificates git fuse
@@ -13,7 +15,7 @@ RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orches
 RUN cd /etc/xen-orchestra && \
     yarn config set network-timeout 200000 && \
     yarn && \
-    yarn build
+    [[ "$include_v6" == "true" ]] && yarn run turbo run build --filter @xen-orchestra/web || yarn build
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
@@ -21,7 +23,7 @@ RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-ser
 # Runner container
 FROM node:20-bullseye-slim
 
-MAINTAINER Roni Väyrynen <roni@vayrynen.info>
+LABEL org.opencontainers.image.authors="Roni Väyrynen <roni@vayrynen.info>"
 
 # Install set of dependencies for running Xen Orchestra
 RUN apt update && \

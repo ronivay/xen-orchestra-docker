@@ -5,11 +5,11 @@ on:
     - cron: "00 3 * * 6"
   push:
     paths-ignore:
-      - 'README.md'
-      - 'docker-compose.yml'
-      - '.github/**'
+      - "README.md"
+      - "docker-compose.yml"
+      - ".github/**"
     branches:
-      - 'master'
+      - "master"
   workflow_dispatch:
 
 jobs:
@@ -45,3 +45,15 @@ jobs:
           tags: |
             ronivay/xen-orchestra:latest
             ronivay/xen-orchestra:${{ env.XO_VERSION }}
+
+      - name: Build image and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            include_v6=true
+          tags: |
+            ronivay/xen-orchestra:latest-v6
+            ronivay/xen-orchestra:${{ env.XO_VERSION }}-v6
