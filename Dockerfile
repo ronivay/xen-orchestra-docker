@@ -12,10 +12,10 @@ RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orches
 
 # Run build tasks against sources
 # Docker buildx QEMU arm64 emulation is slow, so we set timeout for yarn
-RUN cd /etc/xen-orchestra && \
-    yarn config set network-timeout 200000 && \
-    yarn && \
-    [[ "$include_v6" == "true" ]] && yarn run turbo run build --filter @xen-orchestra/web || yarn build
+WORKDIR /etc/xen-orchestra
+RUN yarn config set network-timeout 200000 && yarn && yarn build
+
+RUN [ "$include_v6" = "true" ] && (yarn run turbo run build --filter @xen-orchestra/web || { echo "v6 build failed"; exit 1; }) || echo "v6 build skipped"
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;

@@ -5,11 +5,11 @@ on:
     - cron: "00 3 * * 6"
   push:
     paths-ignore:
-      - "README.md"
-      - "docker-compose.yml"
-      - ".github/**"
+      - 'README.md'
+      - 'docker-compose.yml'
+      - '.github/**'
     branches:
-      - "master"
+      - 'master'
   workflow_dispatch:
 
 jobs:
