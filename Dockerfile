@@ -10,10 +10,11 @@ RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orches
 
 # Run build tasks against sources
 # Docker buildx QEMU arm64 emulation is slow, so we set timeout for yarn
-RUN cd /etc/xen-orchestra && \
-    yarn config set network-timeout 200000 && \
-    yarn && \
-    yarn build
+WORKDIR /etc/xen-orchestra
+RUN yarn config set network-timeout 200000 && yarn && yarn build
+
+# Builds the v6 webui
+RUN yarn run turbo run build --filter @xen-orchestra/web
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
@@ -21,7 +22,7 @@ RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-ser
 # Runner container
 FROM node:20-bullseye-slim
 
-MAINTAINER Roni Väyrynen <roni@vayrynen.info>
+LABEL org.opencontainers.image.authors="Roni Väyrynen <roni@vayrynen.info>"
 
 # Install set of dependencies for running Xen Orchestra
 RUN apt update && \
