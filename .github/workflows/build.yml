@@ -45,15 +45,3 @@ jobs:
           tags: |
             ronivay/xen-orchestra:latest
             ronivay/xen-orchestra:${{ env.XO_VERSION }}
-
-      - name: Build image and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64
-          push: true
-          build-args: |
-            include_v6=true
-          tags: |
-            ronivay/xen-orchestra:latest-v6
-            ronivay/xen-orchestra:${{ env.XO_VERSION }}-v6
