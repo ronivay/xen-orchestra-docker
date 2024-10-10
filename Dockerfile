@@ -1,8 +1,6 @@
 # builder container
 FROM node:20-bullseye as build
 
-ARG include_v6
-
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
     apt install -y build-essential python3-minimal libpng-dev ca-certificates git fuse
