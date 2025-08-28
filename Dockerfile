@@ -1,5 +1,5 @@
 # builder container
-FROM node:22-bookworm as build
+FROM node:22-bookworm AS build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
