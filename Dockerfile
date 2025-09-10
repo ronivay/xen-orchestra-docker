@@ -1,21 +1,30 @@
 # Xen Orchestra builder container
 FROM node:22-trixie as xo-build
 
-# Install set of dependencies to support building Xen Orchestra
+# Install set of dependencies for building Xen Orchestra
 RUN apt update && \
-    apt install -y build-essential python3-minimal libpng-dev ca-certificates git fuse
+    apt install -y build-essential python3-minimal libpng-dev ca-certificates git \
+    fuse libfuse3-dev pkg-config
 
-# Fetch Xen-Orchestra sources from git stable branch
+# Clone Xen Orchestra source code
 RUN git clone -b master https://github.com/vatesfr/xen-orchestra /etc/xen-orchestra
-
-# Run build tasks against sources
-# Docker buildx QEMU arm64 emulation is slow, so we set timeout for yarn
 WORKDIR /etc/xen-orchestra
-RUN yarn config set network-timeout 200000 && yarn && yarn build
 
-# Builds the v6 webui
-# Disabled for now: https://github.com/ronivay/xen-orchestra-docker/issues/54
-#RUN yarn run turbo run build --filter @xen-orchestra/web
+RUN yarn install --network-concurrency 1 --check-files --force || true
+
+# Fix fuse-shared-library-linux to use system libfuse
+RUN mkdir -p node_modules/fuse-shared-library-linux/libfuse/lib \
+    node_modules/fuse-shared-library-linux/include && \
+    ln -sf /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libfuse3.so \
+       node_modules/fuse-shared-library-linux/libfuse/lib/libfuse.so && \
+    ln -sf /usr/include/fuse3 \
+       node_modules/fuse-shared-library-linux/include/fuse
+
+# Rebuild module fuse-native to use system libfuse
+RUN npm rebuild fuse-native --build-from-source
+
+# Build Xen Orchestra
+RUN yarn build
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
@@ -57,7 +66,7 @@ LABEL org.opencontainers.image.authors="Roni Väyrynen <roni@vayrynen.info>"
 
 # Install set of dependencies for running Xen Orchestra
 RUN apt update && \
-    apt install -y redis-server libvhdi-utils libxml2 python3-minimal python3-jinja2 lvm2 libfuse2t64 nfs-common netbase cifs-utils ca-certificates monit procps curl ntfs-3g
+    apt install -y redis-server libvhdi-utils libxml2 python3-minimal python3-jinja2 lvm2 libfuse2t64 nfs-common netbase cifs-utils ca-certificates monit procps curl ntfs-3g git
 
 # Install forever for starting/stopping Xen-Orchestra
 RUN npm install forever -g
