@@ -44,7 +44,7 @@ Xen-Orchestra is now accessible at http://your-ip-address. Default credentials a
 - Other than testing, suggested method is to mount data paths from your host to preserve data
 
 ```
-docker run -itd -p 80:80 -v /path/to/data/xo-server:/var/lib/xo-server -v /path/to/data/redis:/var/lib/redis ronivay/xen-orchestra
+docker run -itd -p 80:80 -v /path/to/data/xo-server:/var/lib/xo-server -v /path/to/data/redis:/var/lib/redis -v /path/to/data/vddk-lib:/usr/local/lib/vddk ronivay/xen-orchestra
 ```
 
 I also suggest adding --stop-timeout since there are multiple services inside single container and we want them to shutdown gracefully when container is stopped. 
@@ -110,6 +110,7 @@ services:
         volumes:
           - xo-data:/var/lib/xo-server
           - redis-data:/var/lib/redis
+          - vddk-lib:/usr/local/lib/vddk
           # mount certificate files to container if HTTPS is set with cert/key paths
           #- /path/to/cert.pem:/cert.pem
           #- /path/to/cert.key:/cert.key
@@ -131,6 +132,7 @@ services:
 volumes:
   xo-data:
   redis-data:
+  vddk-lib:
 ```
 
 #### Variables
