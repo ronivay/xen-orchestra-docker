@@ -1,5 +1,5 @@
 # Xen Orchestra builder container
-FROM node:22-trixie as xo-build
+FROM node:24-trixie as xo-build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
@@ -51,7 +51,7 @@ RUN autoreconf -i && \
     make install DESTDIR=/opt/stage/nbdkit
 
 # Runner container
-FROM node:22-trixie-slim
+FROM node:24-trixie-slim
 
 LABEL org.opencontainers.image.authors="Roni Väyrynen <roni@vayrynen.info>"
 
