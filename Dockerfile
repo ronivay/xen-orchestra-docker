@@ -1,5 +1,5 @@
 # Xen Orchestra builder container
-FROM node:24-trixie as xo-build
+FROM node:24-trixie AS xo-build
 
 # Install set of dependencies to support building Xen Orchestra
 RUN apt update && \
@@ -15,13 +15,13 @@ RUN yarn config set network-timeout 200000 && yarn && yarn build
 
 # Builds the v6 webui
 # Disabled for now: https://github.com/ronivay/xen-orchestra-docker/issues/54
-#RUN yarn run turbo run build --filter @xen-orchestra/web
+RUN yarn run turbo run build --filter @xen-orchestra/web
 
 # Install plugins
 RUN find /etc/xen-orchestra/packages/ -maxdepth 1 -mindepth 1 -not -name "xo-server" -not -name "xo-web" -not -name "xo-server-cloud" -not -name "xo-server-test" -not -name "xo-server-test-plugin" -exec ln -s {} /etc/xen-orchestra/packages/xo-server/node_modules \;
 
 # libnbd / nbdkit builder container
-FROM debian:trixie as nbd-build
+FROM debian:trixie AS nbd-build
 
 # Install set of dependencies for building libnbd and nbdkit
 RUN apt update && \
